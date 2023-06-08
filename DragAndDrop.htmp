@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Drag and Drop Example</title>
+    <style>
+        .container {
+            width: 300px;
+            height: 300px;
+            border: 1px solid black;
+            padding: 10px;
+            margin: 10px;
+            display: inline-block;
+        }
+        
+        .draggable {
+            width: 100px;
+            height: 100px;
+            background-color: #f1f1f1;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            padding: 10px;
+            cursor: move;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="draggable1" class="draggable" draggable="true">
+            Drag me 1
+        </div>
+    </div>
+    <div class="container">
+        <div id="draggable2" class="draggable" draggable="true">
+            Drag me 2
+        </div>
+    </div>
+
+    <script>
+        var draggables = document.querySelectorAll('.draggable');
+        var containers = document.querySelectorAll('.container');
+
+        draggables.forEach(function(draggable) {
+            draggable.addEventListener('dragstart', dragStart);
+            draggable.addEventListener('dragend', dragEnd);
+        });
+
+        containers.forEach(function(container) {
+            container.addEventListener('dragover', dragOver);
+            container.addEventListener('dragenter', dragEnter);
+            container.addEventListener('dragleave', dragLeave);
+            container.addEventListener('drop', drop);
+        });
+
+        function dragStart(e) {
+            this.classList.add('dragging');
+            e.dataTransfer.setData('text/plain', e.target.id);
+        }
+
+        function dragEnd(e) {
+            this.classList.remove('dragging');
+        }
+
+        function dragOver(e) {
+            e.preventDefault();
+        }
+
+        function dragEnter(e) {
+            e.preventDefault();
+            this.classList.add('hovered');
+        }
+
+        function dragLeave() {
+            this.classList.remove('hovered');
+        }
+
+        function drop(e) {
+            this.classList.remove('hovered');
+            var draggableId = e.dataTransfer.getData('text/plain');
+            var draggable = document.getElementById(draggableId);
+            this.appendChild(draggable);
+        }
+    </script>
+</body>
+</html>
